@@ -1,0 +1,51 @@
+﻿﻿
+@model ML.Activity
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ACTIVIDADES REGISTRADAS</h1>
+
+
+<div style="float:right;">
+    @Html.ActionLink("Agregar", "Form", "Activity", htmlAttributes: new { @class = "btn btn-success" })
+</div>
+
+<br />
+<br />
+
+<table class="table table-hover table-striped table-bordered table-responsive">
+    <thead>
+        <tr class="table-secondary">
+            <td style="text-align:center">Editar</td>
+            <td style="text-align:center">id Actividad </td>
+            <td style="text-align:center">Shedule</td>
+            <td style="text-align:center">Tittle</td>
+            <td style="text-align:center">Fecha Creacion</td>
+            <td style="text-align:center">Estatus</td>
+            <td style="text-align:center">Condicion</td>
+            <td style="text-align:center">Eliminar</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (ML.Activity activity in Model.Activitys)
+        {
+            <tr>
+                <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon  glyphicon glyphicon-cog" href="@Url.Action("Form", "Activity", new { IdActivity = activity.IdActivity})"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
+                <td style="text-align:center">@activity.IdActivity </td>
+                <td style="text-align:center">@activity.Cronograma</td>
+                <td style="text-align:center">@activity.Tittle</td>
+                <td style="text-align:center">@activity.Created_at</td>
+                <td style="text-align:center">@activity.Status</td>
+                <td style="text-align:center">@activity.Condicion</td>
+                <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Activity", new { IdActivity = activity.IdActivity})" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
