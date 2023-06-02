@@ -12,7 +12,7 @@ namespace BL
             {
                 using (DL.JrodriguezExamenPracticoTrueHomeContext context = new DL.JrodriguezExamenPracticoTrueHomeContext())
                 {
-                    var query = context.Database.ExecuteSqlRaw($"[ActivityAdd] {Activity.Property.IdProperty},'{Activity.Tittle}','{Activity.Status}'");
+                    var query = context.Database.ExecuteSqlRaw($"[ActivityAdd] '{Activity.Tittle}','{Activity.Created_at}','{Activity.Update_at}','{Activity.Status}',{Activity.Property.IdProperty},'{Activity.Schedule_Inicial}','{Activity.Schedule_Final}'");
                     if (query != null)
                     {
                         result.Correct = true;
