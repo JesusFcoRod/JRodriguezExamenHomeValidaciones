@@ -127,6 +127,7 @@ namespace PL.Controllers
         [HttpPost]
         public ActionResult Form(ML.Activity Activity)
         {
+            //Diferencia de horas
 
             DateTime dt1 = DateTime.ParseExact(Activity.Schedule_Inicial, "dd/MM/yyyy HH:mm", null);
             DateTime dt2 = DateTime.ParseExact(Activity.Schedule_Final, "dd/MM/yyyy HH:mm", null);

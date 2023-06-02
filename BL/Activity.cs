@@ -12,7 +12,7 @@ namespace BL
             {
                 using (DL.JrodriguezExamenPracticoTrueHomeContext context = new DL.JrodriguezExamenPracticoTrueHomeContext())
                 {
-                    var query = context.Database.ExecuteSqlRaw($"[ActivityAdd] '{Activity.Tittle}','{Activity.Created_at}','{Activity.Update_at}','{Activity.Status}',{Activity.Property.IdProperty},'{Activity.Schedule_Inicial}','{Activity.Schedule_Final}'");
+                    var query = context.Database.ExecuteSqlRaw($"[ActivityAdd]  {Activity.Property.IdProperty},'{Activity.Tittle}','{Activity.Created_at}','{Activity.Update_at}','{Activity.Status}','{Activity.Schedule_Inicial}','{Activity.Schedule_Final}'");
                     if (query != null)
                     {
                         result.Correct = true;
@@ -24,6 +24,63 @@ namespace BL
                 }
             }
             catch (Exception ex)
+            {
+                result.Ex = ex;
+                result.ErrorMessage = ex.Message;
+                result.Correct = false;
+            }
+            return result;
+        }
+
+        public static ML.Result Update(ML.Activity Activity)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL.JrodriguezExamenPracticoTrueHomeContext contex = new DL.JrodriguezExamenPracticoTrueHomeContext())
+                {
+                    var query = contex.Database.ExecuteSqlRaw($" [ActivityUpdate] {Activity.IdActivity},'{Activity.Schedule_Inicial}','{Activity.Schedule_Final}','{Activity.Status}' ");
+                    if (query > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                    }
+                }
+
+            }catch(Exception ex)
+            {
+                result.Ex = ex;
+                result.ErrorMessage = ex.Message;
+                result.Correct = false;
+            }
+            return result;
+        }
+
+        public static ML.Result Delete(int IdActivity)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL.JrodriguezExamenPracticoTrueHomeContext contex = new DL.JrodriguezExamenPracticoTrueHomeContext())
+                {
+                    var query = contex.Database.ExecuteSqlRaw($"[ActivityDelete] {IdActivity}");
+
+                    if (query > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                    }
+                }
+                
+            }catch(Exception ex)
             {
                 result.Ex = ex;
                 result.ErrorMessage = ex.Message;
@@ -97,7 +154,9 @@ namespace BL
                         activity.Created_at = query.CreatedAt.ToString();
                         activity.Update_at = query.UpdatedAt.ToString();
                         activity.Tittle = query.Tittle;
-                        activity.Status = query.Status;
+                        activity.Status = query.ActivityStatus;
+                        activity.Schedule_Inicial = query.ScheduleInicial.ToString();
+                        activity.Schedule_Final = query.ScheduleFinal.ToString();
 
                         result.Object = activity;
                         result.Correct = true;

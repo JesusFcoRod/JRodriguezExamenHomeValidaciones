@@ -7,9 +7,24 @@ namespace SL.Controllers
         [HttpPost]
         [Route("api/Activity/Add")]
 
-        public ActionResult Add([FromBody]ML.Activity Activity)
+        public ActionResult Add([FromBody] ML.Activity Activity)
         {
             ML.Result result = BL.Activity.Add(Activity);
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound(result);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/Activity/Update")]
+        public ActionResult Update([FromBody]ML.Activity Activity)
+        {
+            ML.Result result = BL.Activity.Update(Activity);
             if (result.Correct)
             {
                 return Ok(result);
