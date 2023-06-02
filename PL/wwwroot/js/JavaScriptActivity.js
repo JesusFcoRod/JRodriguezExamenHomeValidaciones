@@ -1,6 +1,4 @@
 ﻿
-
-
 $('#txtInicio').change(calculardiferencia);
 $('#txtFin').change(calculardiferencia);
 calculardiferencia();
@@ -46,10 +44,7 @@ function calculardiferencia() {
 
 }
 
-$(function () {
-    $("#txtInicio").datetimepicker({
-        format: 'DD-MM-YYYY HH:mm:ss'
-    });
-});
+
+
 
 

@@ -82,7 +82,7 @@ namespace PL.Controllers
                         client.BaseAddress = new Uri(urlApi);
 
                         var responseTask = client.GetAsync("Activity/GetById/" + IdActivity);
-                        responseTask.Wait(); 
+                        responseTask.Wait();
 
                         var resultServicio = responseTask.Result;
 
@@ -128,57 +128,72 @@ namespace PL.Controllers
         public ActionResult Form(ML.Activity Activity)
         {
 
-            using (var client = new HttpClient())
+            DateTime dt1 = DateTime.ParseExact(Activity.Schedule_Inicial, "dd/MM/yyyy HH:mm", null);
+            DateTime dt2 = DateTime.ParseExact(Activity.Schedule_Final, "dd/MM/yyyy HH:mm", null);
+
+            TimeSpan diferencia = dt2 - dt1;
+            double horasDiferencia = diferencia.TotalHours;
+
+            if (horasDiferencia > 1)
             {
-                if (Activity.IdActivity == 0)
+                ViewBag.Message = "No se puede registar actividades con mas de una hora de duracion";
+                return PartialView("Modal");
+            }
+            else
+            {
+
+                using (var client = new HttpClient())
                 {
-
-                    ML.Result resultPE = BL.Propety.GetById(Activity.Property.IdProperty);//Obtener propiedad
-                    ML.Property propetyEstado = (ML.Property)resultPE.Object;//unboxing
-
-
-                            client.BaseAddress = new Uri(_configuration["urlApi"]);
-
-                            //HTTP POST
-                            var postTask = client.PostAsJsonAsync<ML.Activity>("Activity/Add", Activity);
-                            postTask.Wait();
-
-                            var result = postTask.Result;
-                            if (result.IsSuccessStatusCode)
-                            {
-                                ViewBag.Message = "Se ha registrado la actividad";
-                                return PartialView("Modal");
-                            }
-                            else
-                            {
-                                ViewBag.Message = "No se ha registrado la actividad";
-                                return PartialView("Modal");
-                            }
-
-
-                }
-                else
-                {
-                    client.BaseAddress = new Uri(_configuration["urlApi"]);
-
-                    //HTTP POST
-                    var postTask = client.PostAsJsonAsync<ML.Activity>("Activity/Update/", Activity);
-                    postTask.Wait();
-
-                    var result = postTask.Result;
-                    if (result.IsSuccessStatusCode)
+                    if (Activity.IdActivity == 0)
                     {
-                        ViewBag.Mensaje = "Se ha actualizado la actividad";
-                        return PartialView("Modal");
+
+                        ML.Result resultPE = BL.Propety.GetById(Activity.Property.IdProperty);//Obtener propiedad
+                        ML.Property propetyEstado = (ML.Property)resultPE.Object;//unboxing
+
+
+                        client.BaseAddress = new Uri(_configuration["urlApi"]);
+
+                        //HTTP POST
+                        var postTask = client.PostAsJsonAsync<ML.Activity>("Activity/Add", Activity);
+                        postTask.Wait();
+
+                        var result = postTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            ViewBag.Message = "Se ha registrado la actividad";
+                            return PartialView("Modal");
+                        }
+                        else
+                        {
+                            ViewBag.Message = "No se ha registrado la actividad";
+                            return PartialView("Modal");
+                        }
+
+
                     }
                     else
                     {
-                        ViewBag.Mensaje = "No se ha actualizado la actividad";
-                        return PartialView("Modal");
+                        client.BaseAddress = new Uri(_configuration["urlApi"]);
+
+                        //HTTP POST
+                        var postTask = client.PostAsJsonAsync<ML.Activity>("Activity/Update/", Activity);
+                        postTask.Wait();
+
+                        var result = postTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            ViewBag.Mensaje = "Se ha actualizado la actividad";
+                            return PartialView("Modal");
+                        }
+                        else
+                        {
+                            ViewBag.Mensaje = "No se ha actualizado la actividad";
+                            return PartialView("Modal");
+                        }
+
                     }
 
                 }
-
             }
         }
     }
